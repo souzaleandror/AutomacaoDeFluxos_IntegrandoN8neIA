@@ -520,3 +520,520 @@ A criar e usar uma API Key da OpenAI para integrar o ChatGPT.
 A configurar o ChatGPT para resumir e-mails utilizando prompts específicos.
 A integrar o fluxo do N8N com o Gmail para enviar resumos de e-mails.
 A iniciar a configuração de credenciais no Google Cloud para integrar com Google Drive e Google Sheets.
+
+#30/01/2026
+
+@02-Atendimento ao Cliente Inteligente
+
+@@01
+Conectando N8N ao Outlook para capturar e-mails de clientes
+
+Melhor do que nunca é podermos utilizar todo o nosso conhecimento para solucionar problemas empresariais. A empresa que vamos utilizar no treinamento é a FlexData. A FlexData é uma companhia com diversos setores, como compras, vendas, financeiro e recursos humanos, como qualquer empresa. Ela enfrenta vários problemas que precisam de automação para serem resolvidos, e a partir disso, vamos começar a resolver todos os problemas utilizando o N8N.
+
+A primeira solicitação que recebemos foi da Mariana, a gerente da empresa. A gerente Mariana percebeu que 80% dos e-mails de clientes contêm sempre as mesmas perguntas, como: "Quais são os horários de atendimento?" ou "Posso cancelar o plano?". Ela deseja que utilizemos o N8N com inteligência artificial para gerar respostas automáticas personalizadas com base nas perguntas frequentes e nas respostas oficiais da FlexData, sem necessidade de intervenção humana. Isso é interessante.
+
+Iniciando o fluxo no N8N
+Vamos começar a dar o pontapé inicial. Vamos abrir o N8N e iniciar um novo fluxo. No Workflow, clicamos em Workflow, depois em Personal. Vamos salvar o que está aqui dentro e começar o novo fluxo. Um ponto importante é que, no canto superior esquerdo, temos o nome do fluxo. Podemos clicar e nomear como "resposta automática de e-mail" para sabermos exatamente o que estamos fazendo.
+
+Agora que nomeamos nosso fluxo, vamos criar a conexão com o nosso Outlook. Vamos buscar pelo Outlook, clicar em Microsoft Outlook e selecionar "quando uma mensagem for recebida". Esse será o gatilho que vamos utilizar como exemplo, mas é possível utilizar outro, caso desejemos. Um ponto importante é que a conexão já existe. Podemos escolher fazer isso a cada minuto, a cada hora, etc.
+
+Configurando o processamento de e-mails
+Para uma empresa, dependendo do fluxo de e-mails recebidos, seria interessante processar esses e-mails a cada minuto, a cada hora, etc. No nosso caso, vamos configurar para processar uma vez por dia, para não ficarmos executando requisições desse fluxo constantemente.
+
+Vamos clicar em "Back to Canvas". Agora, selecionamos para voltar ao início e buscamos pela opção chamada "Edit Fields". O que é isso? Ao clicar, buscamos pelo "Edit Fields" ou "set", como era chamado anteriormente. Clicando, percebemos que é necessário executar a etapa anterior. Por quê? Porque assim ele identifica e traz várias informações do nosso e-mail. Não queremos tudo isso. O "Edit Fields" serve basicamente para fazer uma triagem.
+
+Extraindo e renomeando campos do e-mail
+Vamos pegar, por exemplo, o remetente, que é o From. Arrastamos para dentro e trocamos o nome de From para Remetente. Dessa forma, conseguimos identificar quem está enviando a mensagem, para utilizarmos esse JSON no futuro para responder a essa pessoa.
+
+Remetente
+{{ $json.from }}
+COPIAR CÓDIGO
+A próxima etapa é trazer o assunto, que é o Subject. Arrastamos para dentro e renomeamos para Assunto.
+
+Remetente
+{{ $json.from }}
+Assunto
+{{ $json.subject }}
+COPIAR CÓDIGO
+Em seguida, trazemos a mensagem, que é o Body Preview, e chamamos de Mensagem. Assim, sabemos quem enviou tudo isso.
+
+Remetente
+{{ $json.from }}
+Assunto
+{{ $json.subject }}
+Mensagem
+{{ $json.bodyPreview }}
+COPIAR CÓDIGO
+Poderíamos incluir categoria, anexos, etc., mas para tornar nosso fluxo mais rápido e eficiente, fazemos esse pré-filtro utilizando o "Edit Fields".
+
+Executando e conectando a inteligência artificial
+Podemos clicar em executar a etapa, e ele mostrará um output do que está lá dentro. Essa é a parte mais interessante. Vamos clicar novamente em "Back to Canvas". Agora, precisamos conectar nossa inteligência artificial para fazer um resumo de tudo isso.
+
+@@02
+Para saber mais: Análise das Funcionalidades do Edit Fields no N8n
+
+O que é o Edit Fields?
+Dentro do N8n, o Edit Fields é uma funcionalidade que permite modificar, filtrar e organizar dados de maneira eficiente. Imagine que você tem uma lista de informações, como uma planilha, e quer apenas algumas partes dela ou quer reorganizar essas informações. O Edit Fields é a ferramenta que você usaria para fazer isso.
+
+Por que usar o Edit Fields?
+Filtragem de Dados: Às vezes, você só precisa de uma parte específica dos dados. Por exemplo, se você tem uma lista de contatos, mas só quer os e-mails, o Edit Fields pode ajudar a extrair apenas essa informação.
+Organização: Você pode reorganizar os dados para que fiquem mais fáceis de entender ou para que se encaixem melhor em outro sistema ou aplicativo.
+Eficiência: Ao usar o Edit Fields, você economiza tempo e esforço, pois não precisa fazer essas modificações manualmente.
+Como Funciona o Edit Fields?
+Teoria
+O Edit Fields permite que você escolha quais campos (ou colunas) dos seus dados você quer manter, remover ou modificar. Ele também permite renomear campos e criar novos campos com base em cálculos ou transformações.
+
+Exemplo Prático
+Vamos supor que você tenha os seguintes dados de uma lista de contatos:
+
+Nome	E-mail	Telefone
+João	joao@email.com	123456789
+Maria	maria@email.com	987654321
+Pedro	pedro@email.com	555555555
+E você quer apenas os e-mails. Com o Edit Fields, você pode configurar para que o resultado seja:
+
+E-mail
+joao@email.com
+maria@email.com
+pedro@email.com
+Código de Exemplo
+No N8n, você configuraria o Edit Fields da seguinte forma:
+
+Adicionar um nó de Edit Fields: No seu fluxo de trabalho, adicione um nó de Edit Fields.
+Configurar o nó:
+Modo: Escolha "Keep Only" para manter apenas os campos que você quer.
+Campos: Selecione "E-mail".
+Isso fará com que o N8n mantenha apenas a coluna de e-mails nos seus dados.
+
+Com essas informações, você está pronto para começar a explorar o Edit Fields no N8n e ver como ele pode ajudar a tornar seu trabalho com dados mais eficiente e organizado!
+
+@@03
+Personalizando recomendações musicais na Playcatch
+
+A Playcatch, uma plataforma de streaming de música, está buscando maneiras de personalizar ainda mais a experiência de seus usuários. A equipe de desenvolvimento, da qual você faz parte, foi encarregada de criar um sistema que utilize o N8N para enviar recomendações musicais personalizadas por e-mail, com base nos hábitos de escuta dos usuários. O desafio é garantir que as recomendações sejam relevantes e enviadas no momento certo, sem sobrecarregar os usuários com e-mails excessivos.
+Como você estruturaria esse sistema para otimizar a experiência do usuário?
+
+Configurar o N8N para enviar recomendações diárias baseadas em playlists populares, sem considerar os hábitos de escuta individuais dos usuários, para garantir que todos recebam as mesmas sugestões, independentemente de suas preferências pessoais ou histórico de escuta.
+ 
+Alternativa incorreta
+Configurar o N8N para enviar recomendações personalizadas por e-mail sempre que um usuário ouvir uma nova música, garantindo atualizações constantes e imediatas, sem considerar a frequência ideal de envio.
+ 
+Alternativa incorreta
+Utilizar o N8N para enviar recomendações mensais baseadas em um algoritmo que prioriza novas músicas lançadas, sem integração com a base de dados de hábitos de escuta dos usuários, focando apenas em novidades do mercado musical.
+ 
+Alternativa incorreta
+Integrar o N8N com a base de dados de hábitos de escuta dos usuários e configurar o fluxo de trabalho para ser acionado semanalmente. Utilizar a funcionalidade de "Edit Fields" para filtrar dados relevantes, como músicas mais ouvidas e gêneros preferidos, e enviar recomendações personalizadas por e-mail.
+ 
+Correta, pois essa abordagem garante que as recomendações sejam baseadas em dados precisos e relevantes, enviadas em intervalos adequados para evitar sobrecarga de e-mails, melhorando a experiência do usuário na Playcatch.
+
+@@04
+Preparando o ambiente: Resposta Automática Simples
+
+Nesta aula, vamos focar na criação da Resposta Automática Simples, conectando a IA para gerar uma resposta com base nas perguntas frequentes (FAQs) e enviá-la de volta ao cliente.
+Copie e cole os prompts e as expressões abaixo para configurar os nós OpenAI e Microsoft Outlook nesta etapa.
+
+Prompt do Sistema (OpenAI - Role: System)
+Este texto define o papel do ChatGPT como assistente da FlexData e fornece a lista de FAQs para que a IA possa responder. Ele deve ser inserido no primeiro bloco de mensagem do nó do OpenAI.
+Você é um assistente virtual da empresa FlexData.
+Responda educadamente aos clientes com base nas perguntas frequentes abaixo.
+Se a pergunta não estiver nas perguntas frequentes, diga que o time de atendimento já está lá em contato.
+
+FAQs:
+1. Nosso horário de atendimento é de segunda a sexta, das 8h às 18h.
+2. Para emitir a segunda via da fatura, acesse https://flexdata.com.br/fatura.
+3. Para cancelamento, envie uma solicitação para cancelamento@flexdata.com.br.
+4. Nosso telefone é (11) 4000-1234.
+5. O prazo de resposta para suporte técnico é de até 24 horas úteis.
+
+@@05
+Fluxo para responder automaticamente com ChatGPT usando FAQs da empresa
+
+amos conectar o ChatGPT ao nosso modelo. Para isso, clicaremos em "mais" e procuraremos por OpenAI, seguido de MessageModel, que já estamos acostumados a utilizar. Antes de inserir o Prompt, faremos uma configuração inicial. Nossa conta já está conectada, então não precisamos repetir esse processo. Vamos manter o tipo de texto como MessageModel e buscar pelo modelo ChatGPT novamente.
+
+Agora, vamos inserir o Prompt. Já o deixamos preparado para economizar tempo. Vamos copiá-lo e colá-lo no campo de Prompt, trocando a função de User para System. O Prompt será: "Você é um assistente virtual da Flexempresta. Responda educadamente aos clientes com base nas perguntas frequentes abaixo. Se a pergunta não estiver nas perguntas frequentes, informe que o time de atendimento está disponível para contato." As perguntas frequentes podem ser analisadas com calma.
+
+Adicionando e configurando prompts
+Adicionaremos mais um Prompt, agora no estilo usuário. Vamos inserir a mensagem do usuário e pegar o JSON Message que está disponível. Isso permitirá que o ChatGPT avalie o que foi escrito antes de qualquer ação, definindo como ele deve se comportar e qual Prompt deve analisar. Por isso, trocamos as funções de System para User. Inserimos a resposta do cliente e arrastamos a mensagem para dentro do sistema.
+
+Agora, vamos escolher a opção de enviar um e-mail baseado na resposta. Para isso, clicaremos em "mais" e selecionaremos Outlook para enviar a mensagem. Vamos rolar um pouco para baixo e selecionar a opção Message. Nossa conexão já está pronta, e a operação será de envio. Vamos executar essa etapa anterior.
+
+Preparando o envio de e-mail
+Primeiro, vamos deletar o arquivo e executá-lo novamente para evitar erros na etapa de envio de e-mail. Precisamos das saídas em JSON do modelo do ChatGPT para criar um link dinâmico no envio de e-mail. Após a execução, podemos buscar pelo Outlook. Vamos procurar por "Send a Message" novamente.
+
+Para quem vamos enviar? O destinatário será o remetente. Vamos trocar "MessageModel" e buscar por "Edit Fields". O remetente será o mesmo que está enviando. O assunto será uma resposta, seguindo o padrão de resposta. Vamos pegar o assunto que está dentro do e-mail e, na mensagem, inserir o corpo do texto. O conteúdo virá do ChatGPT.
+
+Realizando um teste de envio de e-mail
+Agora, vamos realizar um teste enviando um e-mail para nós mesmos. No Gmail, criaremos um e-mail para o endereço conectado ao Outlook, com o assunto "horário de funcionamento". Vamos escrever com erros de português para verificar se o ChatGPT consegue identificar. A mensagem será: "Olá, que horas a empresa trabalha?" Enviaremos o e-mail e abriremos o Outlook para verificar se ele chega. Vamos atualizar a página para garantir que o e-mail seja recebido rapidamente.
+
+O e-mail "horário de funcionamento" já chegou. Vamos executar o workflow no N8N. O e-mail foi recebido, os campos foram editados, a IA leu e já enviou a resposta. A resposta chegou: "Olá, nosso horário de atendimento é de segunda-feira, 18h18. Posso ajudar com mais alguma coisa?"
+
+Mesmo com erros de português, a IA identificou a pergunta e respondeu automaticamente. Imagine poder parar de responder esses e-mails simples no dia a dia
+
+@@06
+Para saber mais: Integração do Chat GPT com N8n
+
+Por que integrar o Chat GPT com o N8n?
+Integrar o Chat GPT com o N8n pode ser muito útil para automatizar processos que envolvem linguagem natural. Por exemplo, você pode criar um sistema que responde automaticamente a perguntas frequentes dos clientes, ou que gera relatórios baseados em dados que você fornece. Isso economiza tempo e esforço, além de melhorar a eficiência do seu trabalho.
+
+Como configurar o N8n para integrar o Chat GPT
+Agora que você já sabe o que é o N8n e o Chat GPT, vamos ver como integrá-los. Vou explicar passo a passo de uma forma bem simples.
+
+Passo 1: Configurar o N8n
+Instalar o N8n: Primeiro, você precisa ter o N8n instalado no seu computador ou servidor. Você pode fazer isso seguindo as instruções no site oficial do N8n.
+Acessar o N8n: Depois de instalado, acesse o N8n através do seu navegador. Normalmente, ele estará disponível em http://localhost:5678.
+Passo 2: Criar um Workflow no N8n
+Criar um novo workflow: No painel do N8n, clique em "New Workflow" para criar um novo fluxo de trabalho.
+Adicionar um nó de gatilho: Um nó de gatilho é o que inicia o seu workflow. Pode ser um webhook, um evento de calendário, ou qualquer outra coisa que você queira usar para começar o processo.
+Passo 3: Integrar o Chat GPT
+Adicionar um nó HTTP Request: Este nó será usado para enviar uma solicitação ao Chat GPT. Clique em "+" e escolha "HTTP Request".
+Configurar o nó HTTP Request:
+Método: Escolha "POST", pois vamos enviar dados para o Chat GPT.
+URL: Insira a URL da API do Chat GPT. Você precisará de uma chave de API da OpenAI para acessar o Chat GPT.
+Cabeçalhos: Adicione um cabeçalho com a chave de API. Por exemplo:
+{
+  "Authorization": "Bearer SUA_CHAVE_DE_API"
+}
+COPIAR CÓDIGO
+Corpo: No corpo da solicitação, insira o texto que você quer que o Chat GPT processe. Por exemplo:
+{
+  "prompt": "Qual é a previsão do tempo para hoje?",
+  "max_tokens": 50
+}
+COPIAR CÓDIGO
+Conectar os nós: Conecte o nó de gatilho ao nó HTTP Request. Isso garante que quando o gatilho for ativado, a solicitação ao Chat GPT será enviada.
+Passo 4: Testar o Workflow
+Executar o workflow: Clique em "Execute Workflow" para testar se tudo está funcionando corretamente. Se tudo estiver configurado corretamente, você verá a resposta do Chat GPT no painel de saída.
+Espero que esta explicação tenha ajudado você a entender como integrar o Chat GPT com o N8n. Com um pouco de prática, você poderá criar workflows automatizados incríveis que economizam tempo e aumentam a produtividade!
+
+@@07
+Criatividade com modelo multimodal
+
+A empresa Checklist, que oferece uma plataforma de gestão de tarefas e checklists para equipes, está buscando maneiras de otimizar o atendimento ao cliente utilizando inteligência artificial. A equipe de desenvolvimento está considerando integrar um modelo de IA que possa responder automaticamente a perguntas frequentes dos usuários sobre a plataforma, como 'Como criar um novo checklist?' ou 'Como compartilhar tarefas com minha equipe?'. No entanto, a equipe está preocupada com a capacidade do modelo de IA em lidar com perguntas que não estão nas FAQs e em manter um tom educado e profissional.
+Qual é a melhor abordagem para garantir que o modelo de IA atenda a essas preocupações?
+
+Permitir que o modelo de IA improvise respostas para perguntas que não estão nas FAQs, confiando em sua capacidade de aprendizado para manter um tom educado e profissional, além de ajustar suas respostas com base no feedback dos usuários para melhorar continuamente.
+ 
+Alternativa incorreta
+Programar o modelo de IA para redirecionar automaticamente todas as perguntas que não estão nas FAQs para a equipe de suporte, sem fornecer qualquer resposta inicial ao usuário, mas garantindo que a equipe de suporte receba um resumo detalhado da interação para agilizar o atendimento.
+ 
+Alternativa incorreta
+Configurar o modelo de IA para responder apenas a perguntas frequentes e ignorar todas as outras, garantindo que apenas as FAQs sejam abordadas, enquanto se mantém um registro das perguntas ignoradas para análise futura e possível inclusão nas FAQs.
+ 
+Alternativa incorreta
+Configurar o modelo de IA para responder automaticamente às perguntas frequentes utilizando um prompt que instrua a IA a buscar respostas nas FAQs. Para perguntas que não estão nas FAQs, programar o modelo para informar educadamente que a equipe de suporte entrará em contato.
+ 
+Correta, pois essa abordagem garante que o modelo de IA mantenha um tom profissional e forneça uma resposta adequada, mesmo quando não pode resolver a questão imediatamente, alinhando-se às expectativas da empresa.
+
+@@08
+Criando lógica condicional: quando o assunto é complexo, o e-mail é encaminhado para um humano com resposta sugerida pelo ChatGPT
+
+Recebemos um novo desafio logo após entregarmos uma solução. A FlexData, representada por Mariana, está satisfeita com o atendente virtual que implementamos, mas identificou um problema significativo. Alguns e-mails contêm dúvidas muito específicas que o ChatGPT não deve responder sozinho, como reclamações, erros de cobrança ou questões fora das perguntas frequentes que fornecemos.
+
+Nossa missão agora é ensinar o N8N a avaliar o tipo de e-mail. Caso o e-mail seja complexo, ele deve ser encaminhado automaticamente para um atendente humano, junto com uma resposta sugerida pelo ChatGPT.
+
+Modificando o fluxo existente
+Para isso, utilizaremos o mesmo fluxo que já estamos desenvolvendo, mas faremos algumas alterações. Primeiro, vamos apagar o componente Send a Message, que será utilizado posteriormente. Em seguida, precisamos modificar o conector do OpenAI, alterando o prompt, pois agora precisamos classificar as mensagens.
+
+O novo prompt será:
+
+Você é um classificador de mensagens da FlexData.
+Avalie se a mensagem do cliente é SIMPLES ou COMPLEXA.
+
+- SIMPLES: pode ser respondida com base nas FAQs abaixo.
+- COMPLEXA: envolve reclamações, dúvidas financeiras, dúvidas sobre solicitações fora das FAQs.
+
+FAQs:
+1. Endereço: Av. da Liberdade, 123, São Paulo - SP
+2. Horário de atendimento: seg-sex, 8h às 18h
+3. Cancelamento: acesse o portal do cliente
+4. Telefone: (11) 4000-1234
+5. Prazo de resposta: até 24h úteis
+COPIAR CÓDIGO
+Implementando condições para classificação de mensagens
+Precisamos implementar condições para determinar se a mensagem é simples ou complexa. Utilizaremos a condicional if para isso. Adicionamos um if e configuramos para verificar se o conteúdo da mensagem contém a palavra "simples". Se for simples, o ChatGPT deve abrir outro modelo para responder de forma adequada. Caso contrário, se for complexo, ele deve responder de outra maneira.
+
+Na parte do true, ou seja, se a mensagem for simples, adicionamos um novo componente OpenAI e selecionamos message a model. Renomeamos para "resposta simples" e configuramos o prompt para que o ChatGPT responda com base nas perguntas frequentes:
+
+Você é um assistente da FlexData.
+Responda ao cliente com base nas FAQs.
+Seja educado e direto. Se a pergunta não estiver nas FAQs, diga que entraremos em contato.
+COPIAR CÓDIGO
+Configurando respostas para mensagens complexas
+Para o caso do false, ou seja, se a mensagem for complexa, buscamos novamente pelo OpenAI e selecionamos send a message model. Renomeamos para "resposta complexa". O prompt utilizado será:
+
+Gere uma resposta sugerida, curta e educada, para um atendente humano.
+Não envie diretamente ao cliente.
+Apenas resuma o contexto e proponha o que o atendente pode responder.
+COPIAR CÓDIGO
+Por fim, precisamos enviar essa mensagem ao cliente. Na parte do false, buscamos pelo Outlook e configuramos para enviar o e-mail ao remetente original. Assim, garantimos que a mensagem seja encaminhada corretamente.
+
+Explicando o processo de envio de e-mails
+Vamos explicar o processo de envio de e-mails utilizando um flow automatizado. Primeiramente, executamos o flow e aguardamos enquanto ele processa as informações. O sistema identifica que o último e-mail é simples, mesmo que não seja um e-mail de problemas. Após essa identificação, enviamos o e-mail.
+
+Para configurar o envio, buscamos pelo Outlook e selecionamos a opção "send a message". Definimos o destinatário, que será o remetente do e-mail original. Utilizamos a opção "Edit Fields" para ajustar os campos necessários, como remetente e assunto. O conteúdo da mensagem é preenchido com a resposta simples gerada pelo ChatGPT:
+
+{{ $('Edit Fields').item.json.Mensagem }}
+COPIAR CÓDIGO
+Repetimos o processo para e-mails de resposta complexa, ajustando a mensagem para ser enviada ao atendente. Novamente, buscamos pelo Outlook e selecionamos "send a message". Desta vez, enviamos para um e-mail específico, como o de suporte da equipe ou do gerente. No assunto, indicamos "Atendimento manual necessário":
+
+Atendimento manual necessário
+COPIAR CÓDIGO
+Testando o sistema com e-mails complexos e simples
+Caso a mensagem não tenha sido gerada na execução anterior, utilizamos um prompt pré-criado.
+
+Após configurar o envio, retornamos ao Canvas e enviamos um e-mail mais complexo para testar o sistema. O e-mail descreve uma situação de falta de educação de um entregador:
+
+O entregador jogou o meu pacote por cima do muro e quando fui reclamar ele me disse palavras feias.
+COPIAR CÓDIGO
+Enviamos e aguardamos a chegada na caixa de entrada do Outlook para garantir que o ChatGPT o avalie.
+
+Executamos o fluxo novamente. O sistema separa os campos, lê a mensagem e identifica se é complexa. Ele analisa e responde adequadamente. Ambas as respostas são enviadas para o mesmo e-mail, que também é o assistente configurado.
+
+Em seguida, enviamos um e-mail simples para verificar se o fluxo alternativo é ativado. O e-mail pergunta sobre as formas de contato da empresa:
+
+Olá, quais são as formas de contato da empresa?
+COPIAR CÓDIGO
+Após o envio, atualizamos a caixa de entrada e executamos o N8N novamente. O sistema identifica que é um e-mail simples e responde de acordo.
+
+O ChatGPT consegue distinguir entre e-mails simples e complexos, direcionando-os corretamente. Isso demonstra a capacidade do sistema de automatizar o processo de resposta a e-mails, facilitando o atendimento e a gestão de comunicações.
+
+@@09
+Preparando o ambiente: Prompts para Classificação e Ramificação
+
+Nesta aula, vamos focar na evolução do fluxo, introduzindo a classificação de mensagens e a lógica de ramificação.
+Copie e cole os prompts e a expressão da condicional abaixo para configurar os três nós OpenAI e o nó If neste estágio do projeto.
+
+Prompt do Classificador (OpenAI - Nó 1)
+Este prompt é usado no primeiro nó OpenAI e instrui a IA a classificar a mensagem do cliente como SIMPLES ou COMPLEXA, emitindo apenas a palavra-chave.
+Você é um classificador de mensagens da FlexData.
+Avalie se a mensagem do cliente é SIMPLES ou COMPLEXA.
+- SIMPLES: pode ser respondida com base nas FAQs abaixo.
+- COMPLEXA: envolve reclamações, dúvidas financeiras,
+técnicas ou solicitações fora das FAQs.
+
+FAQs:
+1. Segunda via da fatura → https://flexdata.com.br/fatura
+2. Horário de atendimento: seg-sex, 8h às 18h
+3. Cancelamento → cancelamento@flexdata.com.br
+4. Telefone: (11) 4000-1234
+5. Prazo de resposta: até 24h úteis
+COPIAR CÓDIGO
+Condicional (IF)
+Prompt de Resposta Simples (OpenAI - Ramo TRUE do If)
+Este prompt é usado no nó OpenAI do ramo TRUE e serve para gerar a resposta final ao cliente, no caso de um e-mail simples.
+Você é um assistente da FlexData. Responda ao cliente com base nas FAQs.
+Seja educado e direto. Se a pergunta não estiver nas FAQs, diga que entraremos em contato.
+COPIAR CÓDIGO
+Prompt de Resposta Complexa (OpenAI - Ramo FALSE do If)
+Este prompt é usado no nó OpenAI do ramo FALSE e serve para gerar uma sugestão de resposta para o atendente humano da FlexData.
+Gere uma resposta sugerida, curta e educada, para um atendente humano. Não envie diretamente ao cliente. Apenas resuma o contexto e
+proponha o que o atendente pode responder.
+
+@@10
+Para saber mais: Guia Completo sobre as Funções If e Switch
+
+Introdução
+Quando estamos aprendendo a programar, uma das primeiras coisas que precisamos entender é como tomar decisões no nosso código. Imagine que você está criando um jogo e precisa decidir o que acontece quando o jogador ganha ou perde. Para isso, usamos estruturas de controle de fluxo, como o if e o switch. Vamos explorar como cada uma funciona e quando é melhor usar uma ou outra.
+
+O que é a Função If?
+A função if é como um guardião que verifica se uma condição é verdadeira ou falsa. Se a condição for verdadeira, ele executa um bloco de código. Se for falsa, ele pode pular para outra parte do código ou simplesmente não fazer nada.
+
+Como Funciona?
+Pense no if como uma pergunta: "Se isso for verdade, faça aquilo". Aqui está um exemplo simples:
+
+idade = 18 
+  
+if idade >= 18: 
+    print("Você é maior de idade!") 
+else: 
+    print("Você ainda é menor de idade.") 
+COPIAR CÓDIGO
+Neste exemplo, estamos verificando se a idade é maior ou igual a 18. Se for, o programa imprime que a pessoa é maior de idade. Caso contrário, imprime que ainda é menor.
+
+Quando Usar o If?
+Use o if quando você tem uma ou poucas condições para verificar. Ele é muito flexível e pode ser usado em quase qualquer situação onde você precisa tomar uma decisão baseada em uma condição.
+
+O que é a Função Switch?
+A função switch é como um menu de opções. Em vez de verificar uma condição, ele compara um valor com várias opções possíveis e executa o bloco de código correspondente à opção que combina.
+
+Como Funciona?
+Pense no switch como um cardápio de restaurante: "Se você escolher a opção 1, você recebe um hambúrguer; se escolher a opção 2, você recebe uma pizza". Aqui está um exemplo em C++ (já que Python não tem uma estrutura switch nativa):
+
+int dia = 3; 
+  
+switch (dia) { 
+    case 1: 
+        cout << "Segunda-feira"; 
+        break; 
+    case 2: 
+        cout << "Terça-feira"; 
+        break; 
+    case 3: 
+        cout << "Quarta-feira"; 
+        break; 
+    default: 
+        cout << "Dia inválido"; 
+} 
+COPIAR CÓDIGO
+Neste exemplo, o programa verifica o valor da variável dia. Se for 1, imprime "Segunda-feira"; se for 2, imprime "Terça-feira"; e assim por diante. O default é como um "senão", que é executado se nenhuma das opções anteriores for verdadeira.
+
+Quando Usar o Switch?
+Use o switch quando você tem uma variável que pode assumir muitos valores diferentes e você quer executar um código específico para cada valor. Ele é mais organizado e fácil de ler quando comparado a muitos if-else encadeados.
+
+Comparando If e Switch
+Flexibilidade: O if é mais flexível, pois pode lidar com condições complexas, enquanto o switch é mais limitado a comparações diretas de valores.
+Legibilidade: O switch pode ser mais legível quando você tem muitas opções para uma única variável.
+Desempenho: Em alguns casos, o switch pode ser mais eficiente, mas isso depende da linguagem de programação e do compilador.
+Para Saber Mais
+Se você quiser se aprofundar mais, pode explorar como essas estruturas são implementadas em diferentes linguagens de programação, como JavaScript, Java, C#, entre outras. Além disso, experimente criar seus próprios exemplos e veja como cada estrutura se comporta em diferentes situações. Isso ajudará a solidificar seu entendimento e a escolher a melhor ferramenta para cada problema que você enfrentar no futuro.
+
+@@11
+Gerenciamento de reclamações na Meteora
+
+Considerando a Meteora, uma loja online de roupas e acessórios, como a empresa pode garantir que o sistema automatizado não apenas classifique corretamente os e-mails, mas também forneça sugestões de resposta que sejam úteis e adequadas para as pessoas atendentes?
+
+Focar exclusivamente na velocidade de resposta automatizada, priorizando a quantidade de e-mails processados sobre a qualidade das sugestões de resposta fornecidas, e estabelecendo metas de desempenho baseadas no volume de e-mails.
+ 
+Alternativa incorreta
+Utilizar apenas dados de e-mails simples para treinar o modelo de IA, garantindo que o sistema seja rápido e eficiente, sem a necessidade de revisões frequentes das sugestões de resposta, e mantendo um foco restrito em situações de baixa complexidade.
+ 
+Alternativa incorreta
+Implementar um sistema de classificação de e-mails baseado em palavras-chave, sem a necessidade de um mecanismo de aprendizado contínuo, para simplificar o processo de resposta, e garantir que o sistema seja fácil de manter e operar.
+ 
+Alternativa incorreta
+Treinar o modelo de IA com um conjunto abrangente de dados que inclua exemplos de e-mails simples e complexos, além de revisar e ajustar regularmente as sugestões de resposta com base no feedback das pessoas atendentes, integrando um mecanismo de aprendizado contínuo.
+ 
+Correta, pois essa abordagem garante que o sistema automatizado da Meteora não apenas classifique corretamente os e-mails, mas também forneça sugestões de resposta úteis e adaptadas às necessidades em constante mudança dos clientes.
+
+@@12
+Faça como eu fiz na aula: Classificação Inteligente e Resposta Automática
+
+Nesta aula, resolvemos o desafio da FlexData de automatizar o atendimento ao cliente, implementando um fluxo inteligente que classifica e direciona os e-mails recebidos. Você aprendeu a:
+Filtrar os dados de um e-mail recebido (remetente, assunto, mensagem).
+Usar o nó OpenAI como classificador (SIMPLES ou COMPLEXO).
+Utilizar o nó If para criar ramificações de fluxo.
+Gerar uma resposta automática para e-mails simples.
+Gerar uma sugestão de resposta para o atendente humano em casos complexos.
+Agora é sua vez! Siga o passo a passo para replicar a solução de classificação e encaminhamento da FlexData.
+
+Para realizar esta atividade, siga o passo a passo proposto:
+Parte 1: Início do Fluxo e Filtragem de Dados
+
+Passo 1: Criar e Nomear o Fluxo
+
+No n8n, clique no botão + e crie um novo Workflow Personal.
+No canto superior esquerdo, renomeie o fluxo para Resposta automática e-mail.
+Passo 2: Configurar o Trigger (Microsoft Outlook)
+
+Adicione a primeira etapa (Trigger), buscando e selecionando o conector Microsoft Outlook.
+Em Trigger, selecione a opção Quando uma mensagem for recebida.
+Em Mode, troque a frequência de execução para Uma vez por dia.
+Passo 3: Filtrar e Renomear Dados (Edit Fields)
+
+Adicione o nó Edit Fields (ou Set).
+Execute a etapa anterior (Execute Step) no nó Outlook para carregar dados de teste.
+Configure os campos de saída (Output Fields) para criar as variáveis essenciais:
+**Campo:** *from* para **Remetente**
+COPIAR CÓDIGO
+**Campo:** *subject* para **assunto**
+COPIAR CÓDIGO
+**Campo:** *BodyPreview* para **mensagem**
+COPIAR CÓDIGO
+Parte 2: Classificação e Condicional
+
+Passo 4: Configurar o Classificador (OpenAI - Classificador)
+
+Adicione o nó OpenAI após o Edit Fields e selecione a operação Message a Model. Renomeie-o para OpenAI - Classificador.
+Em credencial, verifique se sua chave API do OpenAI está selecionada.
+Em Model, busque pelo ChatGPT-5
+Prompt (Sistema): Copie e cole o Prompt abaixo para instruir a IA a gerar SIMPLES ou COMPLEXA.
+Você é um classificador de mensagens da FlexData.
+Avalie se a mensagem do cliente é SIMPLES ou COMPLEXA.
+- SIMPLES: pode ser respondida com base nas FAQs abaixo.
+- COMPLEXA: envolve reclamações, dúvidas financeiras, técnicas ou solicitações fora das FAQs.
+
+FAQs:
+1. Segunda via da fatura → https://flexdata.com.br/fatura
+2. Horário de atendimento: seg-sex, 8h às 18h
+3. Cancelamento → cancelamento@flexdata.com.br
+4. Telefone: (11) 4000-1234
+5. Prazo de resposta: até 24h úteis
+COPIAR CÓDIGO
+Prompt (Usuário): Mantenha o prompt que referencia a mensagem do cliente
+Mensagem do cliente: {{$json.Mensage}}
+Passo 5: Criar a Condicional (Nó If)
+
+Adicione o nó If após o OpenAI - Classificador.
+Configure a Condição:
+Valor 1: {{$json.message.content }}
+Operação: Selecione Contém (String).
+Valor 2: Digite SIMPLES.
+Volte para o Canva
+Parte 3: Ramo TRUE (E-mails SIMPLES)
+
+**Passo 6: Gerar Resposta Simples **
+
+Adicione um nó OpenAI no ramo TRUE do If. Renomeie-o para Resposta Simples.
+Escolha o modelo ChatGPT-5
+Prompt (Sistema): Copie e cole o Prompt de Resposta Simples para instruir a IA a responder diretamente ao cliente com base nas FAQs.
+Você é um assistente da FlexData. Responda ao cliente com base nas FAQs.
+Seja educado e direto. Se a pergunta não estiver nas FAQs, diga que entraremos em contato.
+COPIAR CÓDIGO
+Prompt (Usuário): Mantenha o prompt que referencia a mensagem do cliente.
+{{ $(‘Edit Fields”).item.json.Mensagem }}
+COPIAR CÓDIGO
+Parte 4: Ramo FALSE (E-mails COMPLEXOS)
+
+Passo 7: Gerar Sugestão de Resposta Complexa
+
+Adicione um nó OpenAI no ramo FALSE do If. Renomeie-o para Resposta Complexa.
+Prompt (Sistema): Copie e cole o Prompt de Resposta Complexa para instruir a IA a gerar uma sugestão para o atendente humano.
+Gere uma resposta sugerida, curta e educada, para um atendente humano.
+Não envie diretamente ao cliente. Apenas resuma o contexto e proponha o que o atendente pode responder.
+COPIAR CÓDIGO
+Prompt (Usuário): Mantenha o prompt que referencia a mensagem do cliente.
+{{ $(‘Edit Fields”).item.json.Mensagem }}
+COPIAR CÓDIGO
+Volte para o Canvas e execute o workflow
+Passo 8: Enviar Resposta ao Cliente (Outlook - Cliente)
+
+Adicione um nó Microsoft Outlook no ramo TRUE e selecione Send a Message.
+Para (To): Use a expressão do remetente ```{{ $node('Edit Fields').item.json.Remetente }}.
+Assunto (Subject): Use a expressão do assunto {{ $’Edit Fields’).item.json.Assunto }}
+Message: Utilize a expressão {{ $json.message.content }}
+Passo 9: Encaminhar para Atendente (Outlook - Atendente)
+
+Adicione um nó Microsoft Outlook no ramo FALSE e selecione Send a Message.
+Para (To): Insira por enquanto seu e-mail
+Assunto (Subject): Digite Atendimento manual necessário.
+Message: Copie e cole o Template de E-mail para Atendente Humano
+Novo e-mail detectado!
+Sugestão da IA:
+{{ $json.message.content }}
+COPIAR CÓDIGO
+Parte 5: Teste Final
+
+Passo 10: Testar Classificação (Simples)
+
+Envie um e-mail com uma pergunta simples
+Ex: "Qual o horário de atendimento?
+Clique em Execute Workflow e verifique se o fluxo seguiu o ramo TRUE e enviou uma resposta automática.
+Passo 11: Testar Classificação (Complexo)
+
+Envie um e-mail com uma reclamação
+Ex: "Preciso cancelar minha assinatura imediatamente!
+Clique em Execute Workflow e verifique se o fluxo seguiu o ramo FALSE e enviou o e-mail de sugestão para a caixa de entrada do atendente (seu e-mail).
+Pronto! Seu fluxo de classificação de e-mails da FlexData está completo.
+
+@@13
+O que aprendemos?
+
+Nesta aula, aprendemos:
+Criar um fluxo no N8N para automação de respostas a e-mails usando IA.
+Configurar gatilhos no N8N para acionar o fluxo com novos e-mails no Outlook.
+Utilizar o ChatGPT no N8N para automação de respostas usando o modelo ChatGPT-5.
+Personalizar prompts no ChatGPT para direcionar o comportamento do modelo.
+Classificar e-mails em simples ou complexos usando o N8N e ChatGPT.
+Implementar condições no fluxo do N8N para ações baseadas na complexidade dos e-mails.
+Automatizar respostas para e-mails simples com o ChatGPT.
+Encaminhar e-mails complexos a atendentes humanos com sugestões do ChatGPT.
